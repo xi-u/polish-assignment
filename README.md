@@ -1,93 +1,91 @@
 # 💅 Polish Assignment
 
+In this assignment you'll take a functional but rough game and make it *feel* good. The mechanics are all there: enemies spawn, flock, shoot, blink and explode. What's missing is the layer of polish that turns "it works" into "it feels great". Your job is to add that layer.
 
+## The Game
 
-## Getting started
+The game is a bullet hell (of sorts), with one important twist: **you cannot attack**. You control a small green ship, and the only thing you can do is dodge. Enemies and their bullets, mines, homing missiles and blast waves come at you from all sides, and all you can do is weave through them and survive for as long as possible. Touch anything and you're dead. After a short pause the arena resets and you try again.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Enemies are introduced one at a time, easiest to hardest. The full roster is only active after roughly five minutes, so the pressure keeps ramping up the longer you stay alive.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+### Controls
 
-## Add your files
+| Input | Action |
+|---|---|
+| `WASD` / Arrow keys | Move (the only thing you can do!) |
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+### The Enemy Roster
+
+All visuals are procedurally generated primitive shapes. Each enemy is recognizable by its color and behaviour:
+
+| Enemy | Color | Behaviour |
+|---|---|---|
+| **TailGator** | Red | Chases the player and fires bullets |
+| **SwarmSparrow** | Orange | Hunts in flocks, swarming toward the player |
+| **WebWeaver** | Pink | Roams the arena, dropping floating mines |
+| **SeekerHawk** | Blue | Pursues the player and launches homing missiles |
+| **BlinkWolf** | Cyan | Hunts in packs, periodically shrinks away and *blinks* right next to you, then charges |
+| **MirrageManta** | Purple | Roams and periodically splits off a clone. Which one is real? |
+| **HiveRaptor** | Yellow | Flocks toward the player and kamikaze-dives when close |
+| **BlastBadger** | Red-violet | Closes in and periodically releases a blast wave |
+
+(There is also a **ShieldRhino**, an enemy with a frontal shield, in the codebase. It is not currently part of the spawn rotation.)
+
+## The Assignment: Add Polish
+
+The game is intentionally unpolished. Quite a few things don't work, or don't *feel*, the way they should. The most obvious one:
+
+- **The camera doesn't smooth its movement at all.** It's supposed to lerp toward the player (and look ahead in the direction of movement), but in practice it doesn't, giving the whole game a jittery, rigid feel. Start in `Assets/Scripts/Behaviours/CameraBehaviour.cs`.
+
+Beyond fixing what's broken, think about everything that makes a game feel alive: smooth camera work, screen shake, hit feedback, particles, sound, telegraphing enemy spawns and attacks, death and restart sequences, transitions, UI feedback. Play the game, notice everything that feels abrupt, stiff or unclear, and polish it.
+
+### One Rule
+
+Before you ask: no, you cannot change the game or its mechanics in any meaningful way. This is not the moment to build the game *you* want to make. You work with what's provided: the player stays defenseless, the enemies keep their behaviour, and the game stays what it is. Polish is about making an existing game feel better, not about making a different game. Learning to work within someone else's design is part of the job.
+
+## Getting Started
+
+1. Install Unity `6000.4.6f1` (or open the project and let Unity Hub fetch the matching editor version).
+2. Clone this repository and open the project folder in Unity.
+3. Open `Assets/Scenes/SampleScene.unity` and press Play.
+
+---
+
+## Project Structure
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.fdmci.hva.nl/studio/playful-tech/modules/polish-assignment.git
-git branch -M main
-git push -uf origin main
+Assets/
+├── Scenes/
+│   └── SampleScene.unity          <-- The one and only game scene
+├── Scripts/
+│   ├── Behaviours/                <-- MonoBehaviours that give entities their behaviour
+│   │   ├── Collision/             <-- Trigger-based collision handling + handler registry
+│   │   ├── Flocking/              <-- Boids: Cohesion, Separation, Alignment, FollowTransform
+│   │   ├── Projectiles/           <-- Mine & homing missile behaviours
+│   │   ├── CameraBehaviour.cs     <-- Follow camera (jittery! see The Assignment)
+│   │   ├── PlayerBehaviour.cs     <-- Input, movement & rotation
+│   │   ├── ShootBehaviour.cs      <-- Generic "stop, shoot, resume" attack component
+│   │   └── ...                    <-- Per-enemy behaviours (BlinkWolf, MirrageManta, ...)
+│   ├── GameObjects/               <-- Entity classes: Player, enemies, stars
+│   │   └── Projectiles/           <-- Bullet, Mine, HomingMissile
+│   ├── ObjectPool/                <-- Generic object pooling (PoolManager, Pool<T>)
+│   ├── PrimitiveShape/            <-- Procedural shapes (Triangle, Circle, ship variants)
+│   └── Utility/                   <-- ServiceLocator, UnitStats, GenerateWorldBehaviour
 ```
 
-## Integrate with your tools
+### How It Fits Together
 
-* [Set up project integrations](https://gitlab.fdmci.hva.nl/studio/playful-tech/modules/polish-assignment/-/settings/integrations)
+- **Entities are plain C# classes, not MonoBehaviours.** `Entity` (in `GameObjects/`) creates and owns its `GameObject` in code. Subclasses like `Player`, `TailGator` and `WebWeaver` build themselves out of procedural `PrimitiveShape`s. There are no prefabs or sprites.
+- **Behaviour is composed, not inherited.** Entities attach reusable `MonoBehaviour` components from `Behaviours/` (movement, flocking, shooting, collision) to get their personality. A `HiveRaptor`, for example, is a triangular ship + flocking + kamikaze behaviour.
+- **Everything is pooled.** `PoolManager` builds a `Pool<T>` per enemy and projectile type (via reflection on the `PoolableType` enum) and recycles entities instead of destroying them. Request entities with `PoolManager.Instance.GetEntity(...)`.
+- **`ServiceLocator`** provides global access to shared services. The most important one is the `Player`, which nearly every enemy behaviour needs to find its target.
+- **`GenerateWorldBehaviour`** builds the arena (walls + play area), spawns the player and runs the escalating enemy spawn coroutines. It also listens for `Player.OnPlayerDied` to reset the game.
 
-## Collaborate with your team
+---
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+## Hand-in
 
-## Test and Deploy
+Submit via the next available assignment on the DLO:
 
-Use the built-in continuous integration in GitLab.
-
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- A .zip of your project folder, **or** a link to your repository
+- A short list of the polish you added (what, where, and why it improves the feel)
