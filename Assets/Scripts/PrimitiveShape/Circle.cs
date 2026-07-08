@@ -45,25 +45,4 @@ public class Circle : PrimitiveShape
         SpriteRenderer spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite;
     }
-
-    public Vector2 GetRandomPositionInCircle()
-    {
-        // Select a random angle
-        float angle = Random.Range(0, 2 * Mathf.PI);
-
-        // Select a random radius
-        float radius = Random.Range(innerRadius, outerRadius);
-
-        // Convert polar coordinates to Cartesian coordinates
-        float x = radius * Mathf.Cos(angle);
-        float y = radius * Mathf.Sin(angle);
-
-        // Create a new vector with these coordinates
-        Vector2 position = new Vector2(x, y);
-
-        // Adjust for the scale of the object
-        position = Vector2.Scale(position, Transform.localScale);
-
-        return position;
-    }
 }
