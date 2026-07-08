@@ -16,7 +16,6 @@ namespace ObjectPool
         HomingMissile,
         SeekerHawk, //shoots homing missiles
         HiveRaptor, //follows the playerTransform in flocks and then khamikazes to them when they are close
-        ShieldRhino, //has a shield that protects them from incoming attacks from the front
         BlinkWolf,
         WebWeaver,
         Mine,

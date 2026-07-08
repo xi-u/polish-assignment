@@ -29,8 +29,6 @@ All visuals are procedurally generated primitive shapes. Each enemy is recogniza
 | **HiveRaptor** | Yellow | Flocks toward the player and kamikaze-dives when close |
 | **BlastBadger** | Red-violet | Closes in and periodically releases a blast wave |
 
-(There is also a **ShieldRhino**, an enemy with a frontal shield, in the codebase. It is not currently part of the spawn rotation.)
-
 ## The Assignment: Add Polish
 
 The game is intentionally unpolished. Quite a few things don't work, or don't *feel*, the way they should. The most obvious one:

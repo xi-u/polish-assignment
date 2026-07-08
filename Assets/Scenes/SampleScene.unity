@@ -291,23 +291,23 @@ MonoBehaviour:
   - initialSize: 10
     poolableType: 6
   - initialSize: 25
-    poolableType: 8
+    poolableType: 7
   - initialSize: 10
     poolableType: 5
+  - initialSize: 10
+    poolableType: 8
   - initialSize: 10
     poolableType: 9
   - initialSize: 10
     poolableType: 10
-  - initialSize: 10
-    poolableType: 11
   - initialSize: 15
-    poolableType: 12
+    poolableType: 11
   - initialSize: 5000
     poolableType: 3
   - initialSize: 10
-    poolableType: 13
+    poolableType: 12
   - initialSize: 20
-    poolableType: 14
+    poolableType: 13
   cameraBehaviour: {fileID: 818745337}
 --- !u!114 &1221539237
 MonoBehaviour:
