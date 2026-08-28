@@ -29,21 +29,19 @@ All visuals are procedurally generated primitive shapes. Each enemy is recogniza
 | **HiveRaptor** | Yellow | Flocks toward the player and kamikaze-dives when close |
 | **BlastBadger** | Red-violet | Closes in and periodically releases a blast wave |
 
-## The Assignment: Add Polish
+## The Assignment
 
-The game is intentionally unpolished. Quite a few things don't work, or don't *feel*, the way they should. The most obvious one:
+Start by describing this fantasy in a **single sentence**, such as "You are a space pirate" or "You are a tiny creature escaping predators." Then identify **three verbs that are central to this fantasy**. Make these purposeful rather than purely mechanical. For example, shooting or dashing describe things the player does, but not necessarily what they are trying to accomplish. A space pirate might "pillage", which is stronger than shoot, because it says something about the nature and purpose of the player fantasy. It tells us that the player is taking something for themselves, and suggests a world of valuable things to steal, opportunities to exploit, and potentially dangerous consequences. Shoot, on the other hand, tells us what the player does, but leaves too much of the fantasy open.
 
-- **The camera doesn't smooth its movement at all.** It's supposed to lerp toward the player (and look ahead in the direction of movement), but in practice it doesn't, giving the whole game a jittery, rigid feel. Start in `Assets/Scripts/Behaviours/CameraBehaviour.cs`.
+For each verb, define what you want it to feel like and design ways to make it feel more meaningful, impactful, responsive, or characteristic of your fantasy. Consider **polish techniques** such as animation, timing, camera, SFX, VFX, UI, and environmental reactions. You are free to modify or extend the existing project where necessary to support your chosen fantasy.
 
-Beyond fixing what's broken, think about everything that makes a game feel alive: smooth camera work, screen shake, hit feedback, particles, sound, telegraphing enemy spawns and attacks, death and restart sequences, transitions, UI feedback. Play the game, notice everything that feels abrupt, stiff or unclear, and polish it.
+Document your process in a PDF document of no more than 2000 words. Treat every significant design decision as a hypothesis: what did you add, change, or remove; what experience did you expect this to create, and why? A useful format is: "If I [make this change], I expect [this player experience] because [reason]." Describe how you tested your ideas, what you observed, and how you refined and iterated on your design as a result.
 
-### One Rule
-
-Before you ask: no, you cannot change the game or its mechanics in any meaningful way. This is not the moment to build the game *you* want to make. You work with what's provided: the player stays defenseless, the enemies keep their behaviour, and the game stays what it is. Polish is about making an existing game feel better, not about making a different game. Learning to work within someone else's design is part of the job.
+The goal is not to add as much polish as possible, but to make deliberate choices that create a specific player experience. Take this into account when considering the scope and feasibility of your project. A small number of well-considered changes that meaningfully improve the intended experience is more valuable than a large number of effects added without a clear purpose.
 
 ## Getting Started
 
-1. Install Unity `6000.4.6f1` (or open the project and let Unity Hub fetch the matching editor version).
+1. Install Unity `6000.5.9f1` (or open the project and let Unity Hub fetch the matching editor version).
 2. Clone this repository and open the project folder in Unity.
 3. Open `Assets/Scenes/SampleScene.unity` and press Play.
 
@@ -85,5 +83,5 @@ Assets/
 
 Submit via the next available assignment on the DLO:
 
-- A .zip of your project folder, **or** a link to your repository
-- A short list of the polish you added (what, where, and why it improves the feel)
+- Modified build of Vortex of Retribution. **No build = automatically no grade!**
+- Design Process Document
