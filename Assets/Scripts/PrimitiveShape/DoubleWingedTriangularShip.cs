@@ -7,11 +7,11 @@ public class DoubleWingedTriangularShip : EntityList
     protected Rigidbody2D rigidbody;
     protected CollisionBehaviour collisionBehaviour;
 
-    public int[] InstanceIds 
-    { 
-        get 
+    public EntityId[] InstanceIds
+    {
+        get
         {
-            return new int[2]
+            return new EntityId[2]
             {
                 leftWing.InstanceId,
                 rightWing.InstanceId

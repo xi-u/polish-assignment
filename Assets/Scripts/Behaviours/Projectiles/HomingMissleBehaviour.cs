@@ -9,8 +9,8 @@ public class HomingMissleBehaviour : MovementBehaviour
     private Rigidbody2D rb2d;
     private HomingMissile owner;
     private ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated;
-    private int bodyInstanceId;
-    public int BodyInstanceId { set { bodyInstanceId = value; } }
+    private EntityId bodyInstanceId;
+    public EntityId BodyInstanceId { set { bodyInstanceId = value; } }
 
     // Start is called before the first frame update
     private void Awake()

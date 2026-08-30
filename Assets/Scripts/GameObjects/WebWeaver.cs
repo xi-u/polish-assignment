@@ -21,20 +21,20 @@ public class WebWeaver : DoubleWingedTriangularShip
         shootingBehaviour.SubscribeToProjectileStateChangedEvent(OnMineActivated, OnMineDeactivated);
     }
     
-    public int InstanceId => GameObject.GetInstanceID();
+    public EntityId InstanceId => GameObject.GetEntityId();
 
     public override void Activate(Vector2 position)
     {
         base.Activate(position);
-        shootingBehaviour.Activate(leftWing.GameObject.GetInstanceID(), rightWing.GameObject.GetInstanceID());
+        shootingBehaviour.Activate(leftWing.GameObject.GetEntityId(), rightWing.GameObject.GetEntityId());
     }
 
-    private void OnMineActivated(int instanceId)
+    private void OnMineActivated(EntityId instanceId)
     {
         collisionBehaviour.StartIgnoringTriggerEventsFor(instanceId);
     }
 
-    private void OnMineDeactivated(int instanceId)
+    private void OnMineDeactivated(EntityId instanceId)
     {
         collisionBehaviour.StopIgnoringTriggerEventsFor(instanceId);
     }

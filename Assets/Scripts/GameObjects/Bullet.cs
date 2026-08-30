@@ -3,9 +3,9 @@ using UnityEngine;
 public class Bullet : Sphere, IProjectile
 {    
     private Rigidbody2D rigidbody;
-    public int InstanceId => GameObject.GetInstanceID();
-    public int[] OwnerIds => ownerIds;
-    private int[] ownerIds;
+    public EntityId InstanceId => GameObject.GetEntityId();
+    public EntityId[] OwnerIds => ownerIds;
+    private EntityId[] ownerIds;
     public Entity Entity => this;
 
     private CollisionBehaviour collisionBehaviour;
@@ -31,7 +31,7 @@ public class Bullet : Sphere, IProjectile
         collisionBehaviour.SubscribeToTriggerEnteredEvent(HandleCollision);
     }
 
-    public void DoShoot(Vector2 direction, ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated, params int[] ownerId)
+    public void DoShoot(Vector2 direction, ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated, params EntityId[] ownerId)
     {        
         this.ownerIds = ownerId;
         rigidbody.linearVelocity = direction;
@@ -42,7 +42,7 @@ public class Bullet : Sphere, IProjectile
     public void HandleCollision(GameObject self, Collider2D colliderInformation)
     {
         Deactivate();
-        onProjectileDeactivated(GameObject.GetInstanceID());        
+        onProjectileDeactivated(GameObject.GetEntityId());        
     }
 
     public override void Deactivate()

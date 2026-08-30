@@ -10,7 +10,7 @@ public class Player : DoubleWingedTriangularShip
     public static event PlayerDiedDelegate OnPlayerDied;
 
     public Entity Entity => this;
-	public int InstanceId => GameObject.GetInstanceID();
+	public EntityId InstanceId => GameObject.GetEntityId();
 
     private PlayerBehaviour playerBehaviour;
     

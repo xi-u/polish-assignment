@@ -22,7 +22,7 @@ public class Entity
         Transform = GameObject.transform;
     }
 
-    public int InstanceId => GameObject.GetInstanceID();
+    public EntityId InstanceId => GameObject.GetEntityId();
 
     public bool IsActive
     {

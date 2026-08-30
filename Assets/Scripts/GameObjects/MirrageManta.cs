@@ -6,7 +6,7 @@ using UnityEngine;
 public class MirrageManta : DoubleWingedTriangularShip
 {
     private MirrageMantaBehaviour mirrageMantaBehaviour;
-    private int[] childIds = new int[0];
+    private EntityId[] childIds = new EntityId[0];
 
     public MirrageManta(string name) : base(name)
     {
@@ -25,7 +25,7 @@ public class MirrageManta : DoubleWingedTriangularShip
         mirrageMantaBehaviour.Activate(this);
     }
 
-    public void SetChildIds(params int[] childIds)
+    public void SetChildIds(params EntityId[] childIds)
     {
         this.childIds = childIds;
         collisionBehaviour.StartIgnoringTriggerEventsFor(childIds);

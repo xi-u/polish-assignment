@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MirrageMantaClone : DoubleWingedTriangularShip
 {
-    private int[] instanceIds;
+    private EntityId[] instanceIds;
     public MirrageMantaClone(string name) : base(name)
     {
         SetCollisionLayer(CollisionLayer.Enemy);
@@ -19,7 +19,7 @@ public class MirrageMantaClone : DoubleWingedTriangularShip
         GameObject.AddComponent<ColorOscillationBehaviour>().Activate(color, colorTo, SpriteRenderers);
     }
     
-    public void SetParentIds(params int[] instanceId)
+    public void SetParentIds(params EntityId[] instanceId)
     {
         this.instanceIds = instanceId;
         collisionBehaviour.StartIgnoringTriggerEventsFor(instanceId);

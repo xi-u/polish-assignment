@@ -7,8 +7,8 @@ public class MineBehaviour : MonoBehaviour
     private Mine owner;
     private ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated;
 
-    private int bodyInstanceId;
-    public int BodyInstanceId { set { bodyInstanceId = value; } }
+    private EntityId bodyInstanceId;
+    public EntityId BodyInstanceId { set { bodyInstanceId = value; } }
 
     private float rotation = 0;
 

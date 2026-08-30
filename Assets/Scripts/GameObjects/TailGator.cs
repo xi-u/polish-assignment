@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class TailGator : TriangularShip
 {
-    public int InstanceId => GameObject.GetInstanceID();
+    public EntityId InstanceId => GameObject.GetEntityId();
     private FollowPlayerBehaviour followPlayer;
     private ShootBehaviour shootBehaviour;
-    private int bulletId;
+    private EntityId bulletId;
 
     public TailGator(string name) : base(name)
 	{
@@ -28,13 +28,13 @@ public class TailGator : TriangularShip
         shootBehaviour.Activate(InstanceId);
     }
 
-    private void OnProjectileActivated(int instanceId)
+    private void OnProjectileActivated(EntityId instanceId)
     {   
         bulletId = instanceId;
         collisionBehaviour.StartIgnoringTriggerEventsFor(instanceId);
     }
 
-    private void OnProjectileDeactivated(int instanceId)
+    private void OnProjectileDeactivated(EntityId instanceId)
     {
         collisionBehaviour.ClearIgnoreTriggerEvents();
     }

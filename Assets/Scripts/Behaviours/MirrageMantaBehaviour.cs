@@ -55,8 +55,8 @@ public class MirrageMantaBehaviour : MonoBehaviour
             }
 
             yield return new WaitForSeconds(2);
-            mirrageClone.SetParentIds(0); 
-            mirrageManta.SetChildIds(0);
+            mirrageClone.SetParentIds(EntityId.None);
+            mirrageManta.SetChildIds(EntityId.None);
         }
     }
 }

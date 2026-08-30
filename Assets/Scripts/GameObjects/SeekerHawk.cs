@@ -39,12 +39,12 @@ public class SeekerHawk : EntityList
         polygonCollider2D.isTrigger = true;
         polygonCollider2D.offset = new Vector2(-1.5f, -1);
     }
-    private void OnProjectileActivated(int instanceId)
+    private void OnProjectileActivated(EntityId instanceId)
     {
         collisionBehaviour.StartIgnoringTriggerEventsFor(instanceId);
     }
 
-    private void OnProjectileDeactivated(int instanceId)
+    private void OnProjectileDeactivated(EntityId instanceId)
     {
         collisionBehaviour.StopIgnoringTriggerEventsFor(instanceId);
     }
@@ -54,7 +54,7 @@ public class SeekerHawk : EntityList
         primitiveShape.Transform.SetParent(Transform, false);
     }
 
-    public int InstanceId => GameObject.GetInstanceID();
+    public EntityId InstanceId => GameObject.GetEntityId();
 
     public Entity Entity => this;
 

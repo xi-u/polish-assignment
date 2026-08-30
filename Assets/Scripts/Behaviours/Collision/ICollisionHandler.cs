@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ICollisionHandler
 {
-    int InstanceId { get; }
+    EntityId InstanceId { get; }
     Entity Entity { get; }
     void HandleCollision(Collider2D colliderInformation, ICollisionHandler other, ICollisionHandler self);
 }

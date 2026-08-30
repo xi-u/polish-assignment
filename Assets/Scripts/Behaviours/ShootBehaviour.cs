@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ShootBehaviour : MonoBehaviour
 {
-    public delegate void OnProjectileStateChanged(int instanceId);
+    public delegate void OnProjectileStateChanged(EntityId instanceId);
     private OnProjectileStateChanged onProjectileActivated, onProjectileDeactivated;
 
     [SerializeField]
@@ -13,7 +13,7 @@ public class ShootBehaviour : MonoBehaviour
         shootingInterval = 5f, waitForShooting = 0.5f;
 
     private float currentSpeed;
-    private int[] ownerIds;
+    private EntityId[] ownerIds;
 
     MovementBehaviour movementBehaviour;
 
@@ -32,7 +32,7 @@ public class ShootBehaviour : MonoBehaviour
     public float ShootingInterval { get => shootingInterval; set => shootingInterval = value; }
     public float WaitForShooting { get => waitForShooting; set => waitForShooting = value; }
 
-    public void Activate(params int[] ownerId)
+    public void Activate(params EntityId[] ownerId)
     {
         if (movementBehaviour == null)
         {

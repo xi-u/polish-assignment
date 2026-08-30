@@ -7,7 +7,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class Mine : EntityList, IProjectile
 {
-    private int[] ownerIds;
+    private EntityId[] ownerIds;
     private CollisionBehaviour collisionBehaviour;
     private MineBehaviour mineBehaviour;
 
@@ -68,11 +68,11 @@ public class Mine : EntityList, IProjectile
         }
     }
 
-    public int InstanceId => body.GameObject.GetInstanceID();
+    public EntityId InstanceId => body.GameObject.GetEntityId();
 
-    public int[] OwnerIds => ownerIds;
+    public EntityId[] OwnerIds => ownerIds;
 
-    public void DoShoot(Vector2 direction, ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated, params int[] ownerIds)
+    public void DoShoot(Vector2 direction, ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated, params EntityId[] ownerIds)
     {
         this.ownerIds = ownerIds;
         mineBehaviour.DoShoot(this, direction, onProjectileDeactivated);

@@ -5,17 +5,17 @@ using UnityEngine;
 
 public class HomingMissile : EntityList, IProjectile
 {
-    private int[] ownerIds;
+    private EntityId[] ownerIds;
     private Rectangle body;
     private Triangle[] wings;
     private Triangle hat;
     private Rigidbody2D rigidbody;
-    public int[] OwnerIds { get { return ownerIds; } set { ownerIds = value; } }
+    public EntityId[] OwnerIds { get { return ownerIds; } set { ownerIds = value; } }
 
     private HomingMissleBehaviour homingMissleBehaviour;
     private CollisionBehaviour collisionBehaviour;
 
-    public int InstanceId => body.GameObject.GetInstanceID();
+    public EntityId InstanceId => body.GameObject.GetEntityId();
 
     public Entity Entity => this;
 
@@ -81,7 +81,7 @@ public class HomingMissile : EntityList, IProjectile
         }
     }
 
-    public void DoShoot(Vector2 direction, ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated, params int[] ownerId)
+    public void DoShoot(Vector2 direction, ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated, params EntityId[] ownerId)
     {
         this.ownerIds = ownerId;
         homingMissleBehaviour.DoShoot(this, direction, onProjectileDeactivated);

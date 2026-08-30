@@ -9,11 +9,11 @@ public class CollisionBehaviour : MonoBehaviour
     public delegate void OnTriggerEntered(GameObject self, Collider2D colliderInformation);
     private OnTriggerEntered onTriggerEntered;
     
-    private List<int> ignoreTriggerEventsFor;
+    private List<EntityId> ignoreTriggerEventsFor;
 
     private void Awake()
     {
-        ignoreTriggerEventsFor = new List<int>();    
+        ignoreTriggerEventsFor = new List<EntityId>();
     }
 
     public void SubscribeToTriggerEnteredEvent(OnTriggerEntered onTriggerEntered)
@@ -21,13 +21,13 @@ public class CollisionBehaviour : MonoBehaviour
         this.onTriggerEntered = onTriggerEntered;
     }
 
-    public void StartIgnoringTriggerEventsFor(params int[] instanceId)
+    public void StartIgnoringTriggerEventsFor(params EntityId[] instanceId)
     {
         ignoreTriggerEventsFor.AddRange(instanceId);
     }
-    public void StopIgnoringTriggerEventsFor(params int[] instanceIds)
+    public void StopIgnoringTriggerEventsFor(params EntityId[] instanceIds)
     {
-        foreach (int instanceId in instanceIds)
+        foreach (EntityId instanceId in instanceIds)
         { 
             ignoreTriggerEventsFor.Remove(instanceId);
         }
@@ -40,7 +40,7 @@ public class CollisionBehaviour : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (ignoreTriggerEventsFor.Contains(collider.gameObject.GetInstanceID()))
+        if (ignoreTriggerEventsFor.Contains(collider.gameObject.GetEntityId()))
         {
             return;
         }
