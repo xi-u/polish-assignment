@@ -29,6 +29,7 @@ public class MirrageMantaClone : DoubleWingedTriangularShip
     {
         base.HandleCollision(self, colliderInformation);
         collisionBehaviour.StopIgnoringTriggerEventsFor(this.instanceIds);
+        CameraBehaviour.Instance.TriggerShake(0.5f, 0.08f);
     }
 
     public override void DestroySelf(bool raiseEntityDestroyedEvent = true)

@@ -88,5 +88,6 @@ public class DoubleWingedTriangularShip : EntityList
     protected virtual void HandleCollision(GameObject self, Collider2D colliderInformation)
     {
         DestroySelf();
+        CameraBehaviour.Instance.TriggerShake(0.5f, 0.08f);
     }
 }

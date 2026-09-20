@@ -60,14 +60,14 @@ public class GenerateWorldBehaviour : MonoBehaviour
     {
         if (spawnFullRosterAtStart)
         {
-            SpawnEnemyImmediately(PoolableType.TailGator, 0.5f);
-            SpawnEnemyImmediately(PoolableType.SwarmSparrow, 0.5f);
-            SpawnEnemyImmediately(PoolableType.WebWeaver, 0.5f);
-            SpawnEnemyImmediately(PoolableType.SeekerHawk, 0.5f);
-            SpawnEnemyGroupImmediately(PoolableType.BlinkWolf, 2, 4, 0.5f);
-            SpawnEnemyImmediately(PoolableType.MirrageManta, 0.5f);
-            SpawnEnemyGroupImmediately(PoolableType.HiveRaptor, 3, 5, 0.5f);
-            SpawnEnemyImmediately(PoolableType.BlastBadger, 0.5f);
+            // SpawnEnemyImmediately(PoolableType.TailGator, 10f);
+            // SpawnEnemyImmediately(PoolableType.SwarmSparrow, 10f);
+            // SpawnEnemyImmediately(PoolableType.WebWeaver, 10f);
+            // SpawnEnemyImmediately(PoolableType.SeekerHawk, 3f);
+            // SpawnEnemyGroupImmediately(PoolableType.BlinkWolf, 2, 4, 1f);
+            // SpawnEnemyImmediately(PoolableType.MirrageManta, 1f);
+            // SpawnEnemyGroupImmediately(PoolableType.HiveRaptor, 3, 5, 1f);
+            SpawnEnemyImmediately(PoolableType.BlastBadger, 1f);
             return;
         }
 

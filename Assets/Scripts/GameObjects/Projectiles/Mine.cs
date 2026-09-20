@@ -88,5 +88,6 @@ public class Mine : EntityList, IProjectile
     {
         DestroySelf();
         collisionBehaviour.StopIgnoringTriggerEventsFor(ownerIds);
+        CameraBehaviour.Instance.TriggerShake(0.75f, 0.08f);
     }
 }

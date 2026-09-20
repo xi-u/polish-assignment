@@ -45,5 +45,6 @@ public class CollisionBehaviour : MonoBehaviour
             return;
         }
         onTriggerEntered(gameObject, collider);
+        CameraBehaviour.Instance.TriggerShake(0.1f, 0.08f, 0.5f);
     }
 }

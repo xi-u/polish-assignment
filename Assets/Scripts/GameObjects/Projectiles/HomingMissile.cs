@@ -92,5 +92,6 @@ public class HomingMissile : EntityList, IProjectile
     {
         DestroySelf();
         collisionBehaviour.StopIgnoringTriggerEventsFor(ownerIds);
+        CameraBehaviour.Instance.TriggerShake(0.75f, 0.08f);
     }
 }
