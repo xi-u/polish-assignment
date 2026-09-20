@@ -1,26 +1,72 @@
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class CameraBehaviour : MonoBehaviour
 {
+    public static CameraBehaviour Instance { get; private set; }
+
     private Rect cameraRect;
     public Rect CameraRect => cameraRect;
     private Transform playerTransform;
     private Rigidbody2D playerRB;
-    
+
     private Camera mainCamera;
     private Player player;
 
     private float smoothing = 5f;
     private Vector3 offset = Vector3.back * 20;
 
+    private Vector3 shakeOffset;
+    private float shakeMagnitude;
+    private float shakeDuration;
+    private float shakeDecay = 2f;
+
     [SerializeField]
     private float zoomOutFactor = 12f, cameraMoveAheadFactor = 0.5f, cameraSlowDownFactor = 0.5f;
     private Vector2 lastTargetPosition;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         mainCamera = Camera.main;
+    }
+
+    public void TriggerShake(float strength, float duration = 0.2f, float decay = 2f)
+    {
+        shakeMagnitude = Mathf.Max(shakeMagnitude, strength);
+        shakeDuration = Mathf.Max(shakeDuration, duration);
+        shakeDecay = decay;
+    }
+
+    private void UpdateShake()
+    {
+        if (shakeDuration <= 0f)
+        {
+            shakeOffset = Vector3.zero;
+            shakeMagnitude = 0f;
+            return;
+        }
+
+        shakeOffset = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f) * shakeMagnitude;
+        shakeDuration -= Time.deltaTime;
+        shakeMagnitude = Mathf.Max(0f, shakeMagnitude - shakeDecay * Time.deltaTime);
+
+        if (shakeDuration <= 0f)
+        {
+            shakeDuration = 0f;
+            shakeMagnitude = 0f;
+            shakeOffset = Vector3.zero;
+        }
     }
 
     private void FixedUpdate()
@@ -42,7 +88,10 @@ public class CameraBehaviour : MonoBehaviour
         Vector2 targetCamPos = (Vector2)playerTransform.position + player.Velocity * cameraMoveAheadFactor;
 
         float cameraMoveSpeed = smoothing * Time.deltaTime * (1 - cameraSlowDownFactor);
-        transform.position = Vector3.Lerp(transform.position, targetCamPos, cameraMoveSpeed) + offset;
+        Vector3 followPosition = Vector3.Lerp(transform.position, targetCamPos, cameraMoveSpeed) + offset;
+
+        UpdateShake();
+        transform.position = followPosition + shakeOffset;
         lastTargetPosition = playerTransform.position;
     }
 
@@ -52,7 +101,7 @@ public class CameraBehaviour : MonoBehaviour
         float cameraWidth = cameraHeight * mainCamera.aspect;
 
         Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.nearClipPlane));
-        cameraRect = new Rect(bottomLeft.x, bottomLeft.y, cameraWidth, cameraHeight);        
+        cameraRect = new Rect(bottomLeft.x, bottomLeft.y, cameraWidth, cameraHeight);
     }
 
     void LateUpdate()

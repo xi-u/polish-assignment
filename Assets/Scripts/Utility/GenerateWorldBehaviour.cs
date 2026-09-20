@@ -16,7 +16,11 @@ public class GenerateWorldBehaviour : MonoBehaviour
     private static Rect playArea = new Rect(0, 0, 25, 25);
     private static Rect worldArea = new Rect(-20, -10, 65, 45);
     public static Rect PlayArea => playArea; 
-
+    
+    // Field to determine whether to spawn the full roster of enemies at the start of the game or to introduce them gradually over time.
+    [SerializeField]
+    private bool spawnFullRosterAtStart = true;
+    
     private void Start()
 	{
         CreateEnvironment();
@@ -54,6 +58,19 @@ public class GenerateWorldBehaviour : MonoBehaviour
     // giving the player more time to adjust as the difficulty ramps up.
     private void CreateEnemies()
     {
+        if (spawnFullRosterAtStart)
+        {
+            SpawnEnemyImmediately(PoolableType.TailGator, 0.5f);
+            SpawnEnemyImmediately(PoolableType.SwarmSparrow, 0.5f);
+            SpawnEnemyImmediately(PoolableType.WebWeaver, 0.5f);
+            SpawnEnemyImmediately(PoolableType.SeekerHawk, 0.5f);
+            SpawnEnemyGroupImmediately(PoolableType.BlinkWolf, 2, 4, 0.5f);
+            SpawnEnemyImmediately(PoolableType.MirrageManta, 0.5f);
+            SpawnEnemyGroupImmediately(PoolableType.HiveRaptor, 3, 5, 0.5f);
+            SpawnEnemyImmediately(PoolableType.BlastBadger, 0.5f);
+            return;
+        }
+
         StartCoroutine(CreateSingleEnemy(PoolableType.TailGator, 3.6f, 0, 0f));
         StartCoroutine(CreateSingleEnemy(PoolableType.SwarmSparrow, 2.4f, 0, 25f));
         StartCoroutine(CreateSingleEnemy(PoolableType.WebWeaver, 5, 4, 55f));
@@ -62,6 +79,17 @@ public class GenerateWorldBehaviour : MonoBehaviour
         StartCoroutine(CreateSingleEnemy(PoolableType.MirrageManta, 6, 4, 175f));
         StartCoroutine(CreateEnemyGroup(PoolableType.HiveRaptor, 3, 5, 7, 3, 225f));
         StartCoroutine(CreateSingleEnemy(PoolableType.BlastBadger, 7, 5, 280f));
+    }
+
+    // The following methods are used to spawn enemies immediately, without waiting for the normal spawn intervals.
+    private void SpawnEnemyImmediately(PoolableType enemyType, float delayBeforeSpawn = 0f)
+    {
+        StartCoroutine(CreateSingleEnemy(enemyType, delayBeforeSpawn, 0f, 0f));
+    }
+
+    private void SpawnEnemyGroupImmediately(PoolableType enemyType, int minAmount, int maxAmount, float delayBeforeSpawn = 0f)
+    {
+        StartCoroutine(CreateEnemyGroup(enemyType, minAmount, maxAmount, delayBeforeSpawn, 0f, 0f));
     }
 
     private Vector2 GetRandomPosition()

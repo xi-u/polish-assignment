@@ -42,6 +42,7 @@ public class Bullet : Sphere, IProjectile
     public void HandleCollision(GameObject self, Collider2D colliderInformation)
     {
         Deactivate();
+        CameraBehaviour.Instance.TriggerShake(0.5f, 0.08f);
         onProjectileDeactivated(GameObject.GetEntityId());        
     }
 
