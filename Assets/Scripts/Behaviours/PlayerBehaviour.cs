@@ -20,6 +20,20 @@ public class PlayerBehaviour : MonoBehaviour
     private float currentAngle;  // The current angle of the playerTransform
     private float rotationProgress = 0;  // Progress of the current rotation
 
+    [SerializeField]
+    private float movementSmoothTime = 0.12f;
+    private Vector2 movementVelocity;
+    private Vector2 currentMoveDirection;
+    
+    [SerializeField]
+    private float stretchAmount = 0.1f;
+
+    [SerializeField]
+    private float stretchSpeed = 0.1f;
+    
+    private Vector3 baseScale;
+    
+
 	Transform pivot;
 
     private void Start()
@@ -28,6 +42,7 @@ public class PlayerBehaviour : MonoBehaviour
 		rigidbody = GetComponent<Rigidbody2D>();
 		pivot = transform.Find("PivotPoint");
         mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -19.8f);
+        baseScale = transform.localScale;
     }
 
 	private void FixedUpdate()
@@ -54,15 +69,29 @@ public class PlayerBehaviour : MonoBehaviour
         float speed = moveDirection.magnitude;
 
         moveDirection.Normalize();
-        Vector2 targetVelocity = moveDirection * movementSpeed;
-        rigidbody.linearVelocity = Vector2.Lerp(rigidbody.linearVelocity, targetVelocity, (Time.deltaTime / 1.5f) * MovementSpeed);
+        currentMoveDirection = Vector2.SmoothDamp(currentMoveDirection, moveDirection, ref movementVelocity, movementSmoothTime);
+        Vector2 targetVelocity = currentMoveDirection * movementSpeed;
+        rigidbody.linearVelocity = targetVelocity;
 
-        if (speed > 0)
+        if (currentMoveDirection.sqrMagnitude > 0.001f)
         {
-            RotatePlayer(moveDirection);
+            RotatePlayer(currentMoveDirection);
         }
 
         ConfinePlayerToWorldBoundaries();
+        StretchPlayer();
+    }
+
+    private void StretchPlayer()
+    {
+        float moveAmount = rigidbody.linearVelocity.magnitude;
+        float stretch = 1f + Mathf.Clamp(moveAmount * stretchAmount, 0f, 0.5f);
+        
+        transform.localScale = Vector3.Lerp(
+            transform.localScale,
+            new Vector3(baseScale.x / stretch, baseScale.y * stretch, baseScale.z),
+            Time.fixedDeltaTime / stretchSpeed
+        );
     }
 
 	public void ConfinePlayerToWorldBoundaries()
