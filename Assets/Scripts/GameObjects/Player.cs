@@ -32,7 +32,7 @@ public class Player : DoubleWingedTriangularShip
 		SetSprite();
     }
     
-    public void SetSprite()
+    private void SetSprite()
     {
 	    shipSprite = Resources.Load<Sprite>("Sprites/spaceship");
 

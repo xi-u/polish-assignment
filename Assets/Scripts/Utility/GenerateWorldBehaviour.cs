@@ -19,7 +19,7 @@ public class GenerateWorldBehaviour : MonoBehaviour
     
     // Field to determine whether to spawn the full roster of enemies at the start of the game or to introduce them gradually over time.
     [SerializeField]
-    private bool spawnFullRosterAtStart = true;
+    private bool spawnFullRosterAtStart = false;
     
     private void Start()
 	{
@@ -58,18 +58,18 @@ public class GenerateWorldBehaviour : MonoBehaviour
     // giving the player more time to adjust as the difficulty ramps up.
     private void CreateEnemies()
     {
-        if (spawnFullRosterAtStart)
-        {
-            SpawnEnemyImmediately(PoolableType.TailGator, 10f);
-            SpawnEnemyImmediately(PoolableType.SwarmSparrow, 10f);
-            SpawnEnemyImmediately(PoolableType.WebWeaver, 10f);
-            SpawnEnemyImmediately(PoolableType.SeekerHawk, 3f);
-            SpawnEnemyGroupImmediately(PoolableType.BlinkWolf, 2, 4, 1f);
-            SpawnEnemyImmediately(PoolableType.MirrageManta, 1f);
-            SpawnEnemyGroupImmediately(PoolableType.HiveRaptor, 3, 5, 1f);
-            SpawnEnemyImmediately(PoolableType.BlastBadger, 1f);
-            return;
-        }
+        // if (spawnFullRosterAtStart)
+        // {
+        // SpawnEnemyImmediately(PoolableType.TailGator, 1f);
+        // SpawnEnemyImmediately(PoolableType.SwarmSparrow, 1f);
+        // SpawnEnemyImmediately(PoolableType.WebWeaver, 1f);
+        // SpawnEnemyImmediately(PoolableType.SeekerHawk, 3f);
+        //     // SpawnEnemyGroupImmediately(PoolableType.BlinkWolf, 2, 4, 1f);
+        //     // SpawnEnemyImmediately(PoolableType.MirrageManta, 1f);
+        //     // SpawnEnemyGroupImmediately(PoolableType.HiveRaptor, 3, 5, 1f);
+        //     // SpawnEnemyImmediately(PoolableType.BlastBadger, 1f);
+        //     return;
+        // }
 
         StartCoroutine(CreateSingleEnemy(PoolableType.TailGator, 3.6f, 0, 0f));
         StartCoroutine(CreateSingleEnemy(PoolableType.SwarmSparrow, 2.4f, 0, 25f));
@@ -153,6 +153,7 @@ public class GenerateWorldBehaviour : MonoBehaviour
         wall.CreatePrimitiveShape();
         wall.GameObject.GetComponent<SpriteRenderer>().color = Color.red;
         wall.Transform.localScale = size;
+        wall.GameObject.GetComponent<SpriteRenderer>().sortingOrder = 5;
         wall.Activate(position);
 
         return wall;

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 705f680c5628af54aa5c3282a17842b7
+guid: a340494155f4cdd4abd94f279a8ca84a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2445615756995415686
-    second: cX_LTv_0
+      213: 5353841184698615464
+    second: fireball_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cX_LTv_0
+      name: fireball_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2160
-        height: 1280
+        x: 24
+        y: 5
+        width: 471
+        height: 486
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 68e4fc4d29290f120800000000000000
-      internalID: 2445615756995415686
+      spriteID: 8a641dd013aac4a40800000000000000
+      internalID: 5353841184698615464
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      cX_LTv_0: 2445615756995415686
+      fireball_0: 5353841184698615464
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
