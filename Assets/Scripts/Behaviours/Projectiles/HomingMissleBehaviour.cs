@@ -11,11 +11,33 @@ public class HomingMissleBehaviour : MovementBehaviour
     private ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated;
     private EntityId bodyInstanceId;
     public EntityId BodyInstanceId { set { bodyInstanceId = value; } }
+    
+    private AudioSource audioSource;
+    private AudioClip wooshClip;
+    private float nextWooshTime;
+    
+    private const float closeRange = 8f;
+    private const float farRange = 10f;
+    private const float wooshCooldown = 3f;
 
     // Start is called before the first frame update
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.pitch = Random.Range(1.5f, 2f);
+        audioSource.volume = 0.6f;
+
+        wooshClip = Resources.Load<AudioClip>("Audio/woosh");
     }
 
     public override float MovementSpeed 
@@ -80,6 +102,42 @@ public class HomingMissleBehaviour : MovementBehaviour
             Vector2 velocity = (rb2d.linearVelocity + playerDir * 0.6f).normalized;
 
             LookAtAndSetVelocity(velocity, 20f);
+        }
+        
+        if (ServiceLocator.Instance == null)
+        {
+            return;
+        }
+
+        Player player;
+        try
+        {
+            player = ServiceLocator.Instance.GetService<Player>();
+        }
+        catch (System.Exception)
+        {
+            return;
+        }
+
+        if (player == null || player.Transform == null)
+        {
+            return;
+        }
+
+        float distanceToPlayer = Vector2.Distance(transform.position, player.Transform.position);
+
+        if (distanceToPlayer <= closeRange)
+        {
+            if (wooshClip != null && Time.time >= nextWooshTime)
+            {
+                audioSource.PlayOneShot(wooshClip);
+                nextWooshTime = Time.time + wooshCooldown;
+            }
+        }
+        else if (distanceToPlayer >= farRange)
+        {
+            audioSource.Stop();
+            nextWooshTime = 0f;
         }
     }
 
