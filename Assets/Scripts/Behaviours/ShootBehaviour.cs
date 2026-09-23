@@ -12,8 +12,14 @@ public class ShootBehaviour : MonoBehaviour
     private float speedChangeDuration = 0.66f, bulletSpeed = 12f,
         shootingInterval = 5f, waitForShooting = 0.5f;
 
+    private AudioClip shootClip;
     private float currentSpeed;
     private EntityId[] ownerIds;
+
+    private void Awake()
+    {
+        shootClip = Resources.Load<AudioClip>("Audio/gunshot");
+    }
 
     MovementBehaviour movementBehaviour;
 
@@ -64,6 +70,17 @@ public class ShootBehaviour : MonoBehaviour
             Vector2 dir = transform.right.normalized;
             float rads = 90f * Mathf.Deg2Rad;
             Vector2 shootDirection = new Vector2(dir.x * Mathf.Cos(rads) - dir.y * Mathf.Sin(rads), dir.x * Mathf.Sin(rads) + dir.y * Mathf.Cos(rads)).normalized * BulletSpeed;
+
+            if (shootClip != null)
+            {
+                if (AudioManager.Instance == null)
+                {
+                    GameObject audioManagerObject = new GameObject("AudioManager");
+                    audioManagerObject.AddComponent<AudioManager>();
+                }
+
+                AudioManager.Instance.Play(shootClip, transform.position, 0.1f);
+            }
 
             PoolManager.Instance.GetEntity(PoolableType, transform.position, (Entity e) =>
             {

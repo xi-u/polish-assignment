@@ -49,6 +49,8 @@ public class AudioManager : MonoBehaviour
             }
         }
 
+        audioSource.spatialBlend = 0.35f;
+        audioSource.volume = volume;
         audioSource.transform.position = position;
         audioSource.PlayOneShot(clip, volume);
     }
