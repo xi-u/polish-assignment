@@ -10,10 +10,26 @@ public class CollisionBehaviour : MonoBehaviour
     private OnTriggerEntered onTriggerEntered;
     
     private List<EntityId> ignoreTriggerEventsFor;
+    
+    private AudioSource audioSource;
+    
 
     private void Awake()
     {
         ignoreTriggerEventsFor = new List<EntityId>();
+        
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        
+        audioSource.playOnAwake = false;
+        audioSource.enabled = true;
+        audioSource.loop = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.volume = 0.6f;
+        audioSource.clip = Resources.Load<AudioClip>("Audio/boom");
     }
 
     public void SubscribeToTriggerEnteredEvent(OnTriggerEntered onTriggerEntered)
@@ -46,5 +62,23 @@ public class CollisionBehaviour : MonoBehaviour
         }
         onTriggerEntered(gameObject, collider);
         CameraBehaviour.Instance.TriggerShake(0.1f, 0.08f, 0.5f);
+        PlayCollisionSound();
+    }
+    
+    public void PlayCollisionSound()
+    {
+        if (audioSource == null || audioSource.clip == null)
+        {
+            return;
+        }
+
+        if (!gameObject.activeSelf || !audioSource.enabled)
+        {
+            AudioSource.PlayClipAtPoint(audioSource.clip, transform.position, audioSource.volume);
+            return;
+        }
+
+        audioSource.enabled = true;
+        audioSource.PlayOneShot(audioSource.clip);
     }
 }
