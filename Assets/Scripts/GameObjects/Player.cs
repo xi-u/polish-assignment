@@ -14,6 +14,8 @@ public class Player : DoubleWingedTriangularShip
 
     private PlayerBehaviour playerBehaviour;
     
+    private Sprite shipSprite;
+    
     public Player(string name, Vector2 startPosition) : base(name)
 	{
 		AddCollider();
@@ -27,6 +29,29 @@ public class Player : DoubleWingedTriangularShip
 
         SetColor(Color.green);
 		Activate(startPosition);
+		SetSprite();
+    }
+    
+    public void SetSprite()
+    {
+	    shipSprite = Resources.Load<Sprite>("Sprites/spaceship");
+
+	    SpriteRenderer spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+	    if (spriteRenderer == null)
+	    {
+		    spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+	    }
+
+	    spriteRenderer.transform.localScale = new  Vector3(0.5f, 0.5f, 0.5f);
+	    spriteRenderer.sprite = shipSprite;
+	    spriteRenderer.sortingOrder = 10;
+	    spriteRenderer.color = Color.white;
+
+	    if (leftWingSpriteRenderer != null)
+		    leftWingSpriteRenderer.enabled = false;
+
+	    if (rightWingSpriteRenderer != null)
+		    rightWingSpriteRenderer.enabled = false;
     }
 
     public Vector2 Velocity => rigidbody.linearVelocity;

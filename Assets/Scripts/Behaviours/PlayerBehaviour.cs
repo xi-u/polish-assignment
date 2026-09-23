@@ -96,8 +96,8 @@ public class PlayerBehaviour : MonoBehaviour
         trailRenderers = new TrailRenderer[2];
         Vector3[] offsets = new Vector3[]
         {
-            new Vector3(-0.25f, -0.8f, 0f),
-            new Vector3(0.25f, -0.8f, 0f)
+            new Vector3(-0.85f, -0.8f, 0f),
+            new Vector3(0.85f, -0.8f, 0f)
         };
 
         for (int i = 0; i < trailAnchors.Length; i++)
@@ -123,7 +123,7 @@ public class PlayerBehaviour : MonoBehaviour
         for (int i = 0; i < trailRenderers.Length; i++)
         {
             trailRenderers[i].material = trailMaterial;
-            trailRenderers[i].sortingOrder = -1;
+            trailRenderers[i].sortingOrder = 5;
         }
     }
 
