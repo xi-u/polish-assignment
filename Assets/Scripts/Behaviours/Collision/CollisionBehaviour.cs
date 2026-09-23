@@ -11,25 +11,12 @@ public class CollisionBehaviour : MonoBehaviour
     
     private List<EntityId> ignoreTriggerEventsFor;
     
-    private AudioSource audioSource;
-    
+    private AudioClip impactClip;
 
     private void Awake()
     {
         ignoreTriggerEventsFor = new List<EntityId>();
-        
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
-        
-        audioSource.playOnAwake = false;
-        audioSource.enabled = true;
-        audioSource.loop = false;
-        audioSource.spatialBlend = 0f;
-        audioSource.volume = 0.6f;
-        audioSource.clip = Resources.Load<AudioClip>("Audio/boom");
+        impactClip = Resources.Load<AudioClip>("Audio/boom");
     }
 
     public void SubscribeToTriggerEnteredEvent(OnTriggerEntered onTriggerEntered)
@@ -60,25 +47,25 @@ public class CollisionBehaviour : MonoBehaviour
         {
             return;
         }
-        onTriggerEntered(gameObject, collider);
+
         CameraBehaviour.Instance.TriggerShake(0.1f, 0.08f, 0.5f);
         PlayCollisionSound();
+        onTriggerEntered?.Invoke(gameObject, collider);
     }
     
     public void PlayCollisionSound()
     {
-        if (audioSource == null || audioSource.clip == null)
+        if (impactClip == null)
         {
             return;
         }
 
-        if (!gameObject.activeSelf || !audioSource.enabled)
+        if (AudioManager.Instance == null)
         {
-            AudioSource.PlayClipAtPoint(audioSource.clip, transform.position, audioSource.volume);
-            return;
+            GameObject audioManagerObject = new GameObject("AudioManager");
+            audioManagerObject.AddComponent<AudioManager>();
         }
 
-        audioSource.enabled = true;
-        audioSource.PlayOneShot(audioSource.clip);
+        AudioManager.Instance.Play(impactClip, transform.position, 0.6f);
     }
 }

@@ -12,7 +12,6 @@ public class HomingMissleBehaviour : MovementBehaviour
     private EntityId bodyInstanceId;
     public EntityId BodyInstanceId { set { bodyInstanceId = value; } }
     
-    private AudioSource audioSource;
     private AudioClip wooshClip;
     private float nextWooshTime;
     
@@ -24,19 +23,6 @@ public class HomingMissleBehaviour : MovementBehaviour
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
-
-        audioSource.playOnAwake = false;
-        audioSource.loop = false;
-        audioSource.spatialBlend = 0f;
-        audioSource.pitch = Random.Range(1.5f, 2f);
-        audioSource.volume = 0.6f;
-
         wooshClip = Resources.Load<AudioClip>("Audio/woosh");
     }
 
@@ -130,13 +116,18 @@ public class HomingMissleBehaviour : MovementBehaviour
         {
             if (wooshClip != null && Time.time >= nextWooshTime)
             {
-                audioSource.PlayOneShot(wooshClip);
+                if (AudioManager.Instance == null)
+                {
+                    GameObject audioManagerObject = new GameObject("AudioManager");
+                    audioManagerObject.AddComponent<AudioManager>();
+                }
+
+                AudioManager.Instance.Play(wooshClip, transform.position, 0.5f);
                 nextWooshTime = Time.time + wooshCooldown;
             }
         }
         else if (distanceToPlayer >= farRange)
         {
-            audioSource.Stop();
             nextWooshTime = 0f;
         }
     }

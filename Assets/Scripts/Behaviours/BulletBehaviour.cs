@@ -9,26 +9,12 @@ public class BulletBehaviour : MovementBehaviour
     private const float wooshCooldown = 3f;
 
     private Rigidbody2D rb2d;
-    private AudioSource audioSource;
     private AudioClip wooshClip;
     private float nextWooshTime;
 
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
-
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
-
-        audioSource.playOnAwake = false;
-        audioSource.loop = false;
-        audioSource.spatialBlend = 0f;
-        audioSource.pitch = Random.Range(2f, 2.5f);
-        audioSource.volume = 0.6f;
-
         wooshClip = Resources.Load<AudioClip>("Audio/woosh");
     }
 
@@ -60,22 +46,19 @@ public class BulletBehaviour : MovementBehaviour
         {
             if (wooshClip != null && Time.time >= nextWooshTime)
             {
-                audioSource.PlayOneShot(wooshClip);
+                if (AudioManager.Instance == null)
+                {
+                    GameObject audioManagerObject = new GameObject("AudioManager");
+                    audioManagerObject.AddComponent<AudioManager>();
+                }
+
+                AudioManager.Instance.Play(wooshClip, transform.position, 0.5f);
                 nextWooshTime = Time.time + wooshCooldown;
             }
         }
         else if (distanceToPlayer >= farRange)
         {
-            audioSource.Stop();
             nextWooshTime = 0f;
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (audioSource != null)
-        {
-            audioSource.Stop();
         }
     }
 
