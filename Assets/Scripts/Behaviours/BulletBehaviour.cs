@@ -42,24 +42,25 @@ public class BulletBehaviour : MovementBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.Transform.position);
 
-        if (distanceToPlayer <= closeRange)
-        {
-            if (wooshClip != null && Time.time >= nextWooshTime)
-            {
-                if (AudioManager.Instance == null)
-                {
-                    GameObject audioManagerObject = new GameObject("AudioManager");
-                    audioManagerObject.AddComponent<AudioManager>();
-                }
-
-                AudioManager.Instance.Play(wooshClip, transform.position, 0.5f);
-                nextWooshTime = Time.time + wooshCooldown;
-            }
-        }
-        else if (distanceToPlayer >= farRange)
+        if (distanceToPlayer >= farRange)
         {
             nextWooshTime = 0f;
+            return;
         }
+
+        if (distanceToPlayer > closeRange)
+        {
+            return;
+        }
+
+        if (wooshClip == null || Time.time < nextWooshTime)
+        {
+            return;
+        }
+
+        AudioManager.EnsureInstanceExists();
+        AudioManager.Instance.Play(wooshClip, transform.position, 0.5f);
+        nextWooshTime = Time.time + wooshCooldown;
     }
 
     public override float MovementSpeed

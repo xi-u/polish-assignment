@@ -33,6 +33,17 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public static void EnsureInstanceExists()
+    {
+        if (Instance != null)
+        {
+            return;
+        }
+
+        GameObject audioManagerObject = new GameObject("AudioManager");
+        audioManagerObject.AddComponent<AudioManager>();
+    }
+
     public void Play(AudioClip clip, Vector3 position, float volume = 0.6f)
     {
         if (clip == null)
