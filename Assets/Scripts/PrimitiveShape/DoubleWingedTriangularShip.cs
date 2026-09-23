@@ -54,12 +54,12 @@ public class DoubleWingedTriangularShip : EntityList
     protected void CreateBody()
     {
         leftWing = new Triangle("Left Wing");
-        leftWing.CreatePrimitiveShape(new Vector2[3] { new(-0.5f, -0.3f), new(0, 0), new(0, 1) });
+        leftWing.CreatePrimitiveShape(new Vector2[3] { new(-1.6f, -0.9f), new(0.3f, 0), new(0.3f, 2.4f) });
         leftWingSpriteRenderer = leftWing.Transform.GetComponent<SpriteRenderer>();
         leftWing.Transform.SetParent(Transform, false);
 
         rightWing = new Triangle("Right Wing");
-        rightWing.CreatePrimitiveShape(new Vector2[3] { new(1, -0.3f), new(0.5f, 0), new(0.5f, 1) });
+        rightWing.CreatePrimitiveShape(new Vector2[3] { new(2.6f, -0.9f), new(0.7f, 0), new(0.7f, 2.4f) });
         rightWingSpriteRenderer = rightWing.Transform.GetComponent<SpriteRenderer>();
         rightWing.Transform.SetParent(Transform, false);
         rightWing.Transform.localPosition = new Vector3(0.5f, 0, 0);
