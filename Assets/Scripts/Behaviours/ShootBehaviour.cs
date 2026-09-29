@@ -79,7 +79,7 @@ public class ShootBehaviour : MonoBehaviour
                     audioManagerObject.AddComponent<AudioManager>();
                 }
 
-                AudioManager.Instance.Play(shootClip, transform.position, 0.1f);
+                AudioManager.Instance.Play(shootClip, transform.position, 0.25f);
             }
 
             PoolManager.Instance.GetEntity(PoolableType, transform.position, (Entity e) =>
