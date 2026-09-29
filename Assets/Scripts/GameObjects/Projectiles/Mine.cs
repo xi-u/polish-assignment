@@ -15,6 +15,7 @@ public class Mine : EntityList, IProjectile
     private List<Triangle> spikes;
     private CircleCollider2D collider;
     private Rigidbody2D rigidbody;
+    private Sprite mineSprite;
 
     public Mine(string name) : base(name)
     {
@@ -43,6 +44,25 @@ public class Mine : EntityList, IProjectile
         CreateSpikes(8);
 
         Transform.localScale = Vector3.one * 0.5f;
+        
+        SetSprite();
+    }
+    
+    private void SetSprite()
+    {
+        mineSprite = Resources.Load<Sprite>("Sprites/mine");
+
+        SpriteRenderer spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+        }
+
+        spriteRenderer.transform.localScale = new  Vector3(0.3f, 0.3f, 0.3f);
+        spriteRenderer.sprite = mineSprite;
+        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.color = Color.white;
+
     }
 
     private void CreateSpikes(int numberOfSpikes)
