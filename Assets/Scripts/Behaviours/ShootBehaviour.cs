@@ -71,21 +71,33 @@ public class ShootBehaviour : MonoBehaviour
             float rads = 90f * Mathf.Deg2Rad;
             Vector2 shootDirection = new Vector2(dir.x * Mathf.Cos(rads) - dir.y * Mathf.Sin(rads), dir.x * Mathf.Sin(rads) + dir.y * Mathf.Cos(rads)).normalized * BulletSpeed;
 
-            if (shootClip != null)
-            {
-                if (AudioManager.Instance == null)
-                {
-                    GameObject audioManagerObject = new GameObject("AudioManager");
-                    audioManagerObject.AddComponent<AudioManager>();
-                }
-
-                AudioManager.Instance.Play(shootClip, transform.position, 0.25f);
-            }
+            // if (shootClip != null)
+            // {
+            //     if (AudioManager.Instance == null)
+            //     {
+            //         GameObject audioManagerObject = new GameObject("AudioManager");
+            //         audioManagerObject.AddComponent<AudioManager>();
+            //     }
+            //
+            //     AudioManager.Instance.Play(shootClip, transform.position, 0.25f);
+            // }
 
             PoolManager.Instance.GetEntity(PoolableType, transform.position, (Entity e) =>
             {
                 IProjectile projectile = e as IProjectile;
                 onProjectileActivated(projectile.InstanceId);
+
+                if (shootClip != null && !(projectile is Mine))
+                {
+                    if (AudioManager.Instance == null)
+                    {
+                        GameObject audioManagerObject = new GameObject("AudioManager");
+                        audioManagerObject.AddComponent<AudioManager>();
+                    }
+
+                    AudioManager.Instance.Play(shootClip, transform.position, 0.25f);
+                }
+
                 projectile.DoShoot(shootDirection, onProjectileDeactivated, ownerIds);
             });
 

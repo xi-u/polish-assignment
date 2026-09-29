@@ -38,6 +38,7 @@ public class MineBehaviour : MonoBehaviour
         initialPosition = transform.position;
         this.owner = owner;
         this.onProjectileDeactivated = onProjectileDeactivated;
+        AudioManager.Instance.Play(Resources.Load<AudioClip>("Audio/mine"), transform.position, 0.25f);
         StartCoroutine(CanShootOwner());
     }
 
