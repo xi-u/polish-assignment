@@ -12,6 +12,7 @@ public class Bullet : Sphere, IProjectile
     private ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated;
     
     private Sprite bulletSprite;
+    private TrailRenderer trailRenderer;
 
     public Bullet(string name) : base(name)
     {
@@ -27,10 +28,35 @@ public class Bullet : Sphere, IProjectile
         collisionBehaviour = GameObject.AddComponent<CollisionBehaviour>();
         GameObject.AddComponent<EnterCameraViewportBehaviour>();
         GameObject.AddComponent<BulletBehaviour>();
+        ConfigureTrail();
         SetSprite();
         rigidbody.gravityScale = 0;
 
         collisionBehaviour.SubscribeToTriggerEnteredEvent(HandleCollision);
+    }
+
+    private void ConfigureTrail()
+    {
+        trailRenderer = GameObject.GetComponent<TrailRenderer>();
+        if (trailRenderer == null)
+        {
+            trailRenderer = GameObject.AddComponent<TrailRenderer>();
+        }
+
+        trailRenderer.time = 0.18f;
+        trailRenderer.startWidth = 0.5f;
+        trailRenderer.endWidth = 0f;
+        trailRenderer.minVertexDistance = 0.05f;
+        trailRenderer.autodestruct = false;
+        trailRenderer.emitting = true;
+        trailRenderer.startColor = new Color(1f, 0.7f, 0.2f, 1f);
+        trailRenderer.endColor = new Color(1f, 0.3f, 0f, 0f);
+        trailRenderer.sortingOrder = 9;
+
+        Material trailMaterial = new Material(Shader.Find("Sprites/Default"));
+        trailMaterial.color = trailRenderer.startColor;
+        trailRenderer.material = trailMaterial;
+        trailRenderer.Clear();
     }
 
     private void SetSprite()
@@ -52,6 +78,7 @@ public class Bullet : Sphere, IProjectile
     public void DoShoot(Vector2 direction, ShootBehaviour.OnProjectileStateChanged onProjectileDeactivated, params EntityId[] ownerId)
     {        
         this.ownerIds = ownerId;
+        trailRenderer.Clear();
         rigidbody.linearVelocity = direction;
         collisionBehaviour.StartIgnoringTriggerEventsFor(ownerId);
         this.onProjectileDeactivated = onProjectileDeactivated;
@@ -67,6 +94,10 @@ public class Bullet : Sphere, IProjectile
     public override void Deactivate()
     {
         base.Deactivate();
+        if (trailRenderer != null)
+        {
+            trailRenderer.Clear();
+        }
         collisionBehaviour.ClearIgnoreTriggerEvents();
     }
 }
