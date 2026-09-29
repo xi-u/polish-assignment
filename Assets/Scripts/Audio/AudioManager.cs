@@ -5,6 +5,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
 
     private AudioSource audioSource;
+    private AudioSource musicSource;
 
     private void Awake()
     {
@@ -26,6 +27,12 @@ public class AudioManager : MonoBehaviour
         audioSource.playOnAwake = false;
         audioSource.loop = false;
         audioSource.spatialBlend = 0.35f;
+
+        musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.playOnAwake = false;
+        musicSource.loop = true;
+        musicSource.spatialBlend = 0f;
+        PlayMusic(Resources.Load<AudioClip>("Audio/space"), 0.1f);
 
         if (Camera.main != null && Camera.main.GetComponent<AudioListener>() == null)
         {
@@ -64,5 +71,37 @@ public class AudioManager : MonoBehaviour
         audioSource.volume = volume;
         audioSource.transform.position = position;
         audioSource.PlayOneShot(clip, volume);
+    }
+
+    public void PlayMusic(AudioClip clip, float volume = 0.35f)
+    {
+        if (clip == null)
+        {
+            return;
+        }
+
+        if (musicSource == null)
+        {
+            musicSource = gameObject.AddComponent<AudioSource>();
+            musicSource.playOnAwake = false;
+            musicSource.loop = true;
+            musicSource.spatialBlend = 0f;
+        }
+
+        musicSource.clip = clip;
+        musicSource.volume = volume;
+        musicSource.loop = true;
+        if (!musicSource.isPlaying)
+        {
+            musicSource.Play();
+        }
+    }
+
+    public void StopMusic()
+    {
+        if (musicSource != null)
+        {
+            musicSource.Stop();
+        }
     }
 }
