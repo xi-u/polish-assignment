@@ -13,9 +13,11 @@ public class GenerateWorldBehaviour : MonoBehaviour
 {
     private Player player;    
 
-    private static Rect playArea = new Rect(0, 0, 25, 25);
-    private static Rect worldArea = new Rect(-20, -10, 65, 45);
-    public static Rect PlayArea => playArea; 
+    // The world is intentionally much larger than the viewport so it feels endless without a hard wrap.
+    private static Rect playArea = new Rect(-30f, -20f, 60f, 40f);
+    private static Rect worldArea = new Rect(-200f, -200f, 400f, 400f);
+    public static Rect PlayArea => playArea;
+    public static Rect WorldArea => worldArea;
     
     // Field to determine whether to spawn the full roster of enemies at the start of the game or to introduce them gradually over time.
     [SerializeField]
@@ -93,9 +95,35 @@ public class GenerateWorldBehaviour : MonoBehaviour
     }
 
     private Vector2 GetRandomPosition()
-    {        
-        Vector2 randomPosition = Utility.GetRandomPositionOutsideRect(playArea, 10f);
-        return randomPosition;
+    {
+        Vector2 playerPosition = player != null ? player.Transform.position : Vector2.zero;
+        Camera camera = Camera.main;
+
+        if (camera == null)
+        {
+            return playerPosition + new Vector2(Random.Range(-12f, 12f), Random.Range(-8f, 8f));
+        }
+
+        float halfHeight = camera.orthographicSize + 4f;
+        float halfWidth = halfHeight * camera.aspect + 4f;
+        float xMin = playerPosition.x - halfWidth;
+        float xMax = playerPosition.x + halfWidth;
+        float yMin = playerPosition.y - halfHeight;
+        float yMax = playerPosition.y + halfHeight;
+
+        float x = Random.Range(xMin, xMax);
+        float y = Random.Range(yMin, yMax);
+
+        if (Mathf.Abs(x - playerPosition.x) < halfWidth * 0.8f && Mathf.Abs(y - playerPosition.y) < halfHeight * 0.8f)
+        {
+            int side = Random.Range(0, 4);
+            if (side == 0) x = playerPosition.x + halfWidth + Random.Range(1f, 4f);
+            else if (side == 1) x = playerPosition.x - halfWidth - Random.Range(1f, 4f);
+            else if (side == 2) y = playerPosition.y + halfHeight + Random.Range(1f, 4f);
+            else y = playerPosition.y - halfHeight - Random.Range(1f, 4f);
+        }
+
+        return new Vector2(x, y);
     }
 
     private IEnumerator CreateSingleEnemy(PoolableType enemyType, float waitBefore, float waitAfter, float initialDelay = 0f)
@@ -105,7 +133,7 @@ public class GenerateWorldBehaviour : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(waitBefore);
-            Vector2 randomPosition = Utility.GetRandomPositionOutsideRect(playArea, 10f);
+            Vector2 randomPosition = GetRandomPosition();
             PoolManager.Instance.GetEntity(enemyType, randomPosition, (Entity e) => { });
             yield return new WaitForSeconds(waitAfter);
         }
@@ -136,10 +164,7 @@ public class GenerateWorldBehaviour : MonoBehaviour
 
     private void CreateEnvironment()
     {
-        CreateWall(new Vector2(-1, 12.506f), new Vector2(0.1f, 26.68815f));
-        CreateWall(new Vector2(26, 12.506f), new Vector2(0.1f, 26.68815f));
-        CreateWall(new Vector2(12.49997f, 25.85f), new Vector2(27.10007f, 0.1f));
-        CreateWall(new Vector2(12.49997f, -0.89f), new Vector2(27.10007f, 0.1f));
+        // No visible walls. We use world wrapping to create the illusion of an endless space.
     }
 
     public static bool IsPositionInPlayArea(Vector2 position)

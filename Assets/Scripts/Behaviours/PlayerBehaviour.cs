@@ -141,33 +141,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void ConfinePlayerToWorldBoundaries()
     {
-        // Predict the next position based on the current velocity
-        Vector2 nextPosition = rigidbody.position + rigidbody.linearVelocity * Time.fixedDeltaTime;
-
-        // Create a copy of the velocity vector
-        Vector2 newVelocity = rigidbody.linearVelocity;
-
-        // Check if the next position is outside the world bounds and correct the velocity
-        if (nextPosition.x < GenerateWorldBehaviour.PlayArea.xMin)
-        {
-            newVelocity.x = 0;
-        }
-        else if (nextPosition.x > GenerateWorldBehaviour.PlayArea.xMax)
-        {
-            newVelocity.x = 0;
-        }
-
-        if (nextPosition.y < GenerateWorldBehaviour.PlayArea.yMin)
-        {
-            newVelocity.y = 0;
-        }
-        else if (nextPosition.y > GenerateWorldBehaviour.PlayArea.yMax)
-        {
-            newVelocity.y = 0;
-        }
-
-        // Update the velocity
-        rigidbody.linearVelocity = newVelocity;
+        // No hard boundary clamp here: the world is intentionally much larger than the camera,
+        // so the player keeps moving smoothly and the space feels endless without a visible wall.
     }
 
     private void RotatePlayer(Vector2 moveDirection)
