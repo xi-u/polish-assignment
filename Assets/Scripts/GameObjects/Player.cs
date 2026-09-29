@@ -58,10 +58,10 @@ public class Player : DoubleWingedTriangularShip
 
     protected override void HandleCollision(GameObject self, Collider2D colliderInformation)
     {
-        // OnPlayerDied?.Invoke(GameObject);
-        // DestroySelf();
+        OnPlayerDied?.Invoke(GameObject);
+        DestroySelf();
         
         // TODO: for testing returbn
-        return;
+        // return;
     }
 }

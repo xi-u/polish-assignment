@@ -1,10 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraBehaviour : MonoBehaviour
 {
     public static CameraBehaviour Instance { get; private set; }
 
     private Rect cameraRect;
+    private Canvas flashCanvas;
+    private Image flashImage;
+    private float flashAlpha;
+    private float flashFadePerSecond;
     public Rect CameraRect => cameraRect;
     private Transform playerTransform;
     private Rigidbody2D playerRB;
@@ -33,7 +38,10 @@ public class CameraBehaviour : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
+
+        CreateScreenFlash();
     }
 
     void Start()
@@ -41,11 +49,47 @@ public class CameraBehaviour : MonoBehaviour
         mainCamera = Camera.main;
     }
 
+    private void CreateScreenFlash()
+    {
+        GameObject flashObject = new GameObject("ScreenFlash");
+        flashObject.transform.SetParent(transform, false);
+
+        flashCanvas = flashObject.AddComponent<Canvas>();
+        flashCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        flashCanvas.sortingOrder = 1000;
+
+        flashObject.AddComponent<CanvasScaler>();
+
+        GameObject flashImageObject = new GameObject("FlashImage");
+        flashImageObject.transform.SetParent(flashObject.transform, false);
+
+        RectTransform flashRect = flashImageObject.AddComponent<RectTransform>();
+        flashRect.anchorMin = Vector2.zero;
+        flashRect.anchorMax = Vector2.one;
+        flashRect.offsetMin = Vector2.zero;
+        flashRect.offsetMax = Vector2.zero;
+
+        flashImage = flashImageObject.AddComponent<Image>();
+        flashImage.color = new Color(1f, 1f, 1f, 0f);
+        flashImage.raycastTarget = false;
+    }
+
     public void TriggerShake(float strength, float duration = 0.2f, float decay = 2f)
     {
         shakeMagnitude = Mathf.Max(shakeMagnitude, strength);
         shakeDuration = Mathf.Max(shakeDuration, duration);
         shakeDecay = decay;
+    }
+
+    public void TriggerFlash(float intensity = 0.8f, float duration = 0.15f)
+    {
+        if (flashImage == null)
+        {
+            return;
+        }
+
+        flashAlpha = Mathf.Max(flashAlpha, intensity);
+        flashFadePerSecond = Mathf.Max(0.1f, intensity / Mathf.Max(duration, 0.05f));
     }
 
     private void UpdateShake()
@@ -93,6 +137,20 @@ public class CameraBehaviour : MonoBehaviour
         UpdateShake();
         transform.position = followPosition + shakeOffset;
         lastTargetPosition = playerTransform.position;
+    }
+
+    private void Update()
+    {
+        if (flashImage == null)
+        {
+            return;
+        }
+
+        if (flashAlpha > 0f)
+        {
+            flashAlpha = Mathf.Max(0f, flashAlpha - flashFadePerSecond * Time.deltaTime);
+            flashImage.color = new Color(1f, 1f, 1f, flashAlpha);
+        }
     }
 
     private void UpdateCameraRect()
