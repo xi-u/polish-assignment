@@ -32,7 +32,7 @@ public class AudioManager : MonoBehaviour
         musicSource.playOnAwake = false;
         musicSource.loop = true;
         musicSource.spatialBlend = 0f;
-        PlayMusic(Resources.Load<AudioClip>("Audio/space"), 0.1f);
+        PlayMusic(Resources.Load<AudioClip>("Audio/space2"), 0.35f);
 
         if (Camera.main != null && Camera.main.GetComponent<AudioListener>() == null)
         {
