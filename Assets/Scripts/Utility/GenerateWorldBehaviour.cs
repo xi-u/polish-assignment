@@ -64,7 +64,7 @@ public class GenerateWorldBehaviour : MonoBehaviour
         // {
         // SpawnEnemyImmediately(PoolableType.TailGator, 1f);
         // SpawnEnemyImmediately(PoolableType.SwarmSparrow, 1f);
-        SpawnEnemyImmediately(PoolableType.WebWeaver, 1f);
+        // SpawnEnemyImmediately(PoolableType.WebWeaver, 1f);
         // SpawnEnemyImmediately(PoolableType.SeekerHawk, 1f);
         // SpawnEnemyGroupImmediately(PoolableType.BlinkWolf, 2, 4, 1f);
         // SpawnEnemyImmediately(PoolableType.MirrageManta, 1f);
