@@ -14,6 +14,8 @@ public class HomingMissile : EntityList, IProjectile
 
     private HomingMissleBehaviour homingMissleBehaviour;
     private CollisionBehaviour collisionBehaviour;
+    
+    private Sprite missleSprite;
 
     public EntityId InstanceId => body.GameObject.GetEntityId();
 
@@ -47,11 +49,29 @@ public class HomingMissile : EntityList, IProjectile
         homingMissleBehaviour.BodyInstanceId = InstanceId;
 
         collisionBehaviour.SubscribeToTriggerEnteredEvent(HandleCollision);
+        
+        SetSprite();
+    }
+    
+    private void SetSprite()
+    {
+        missleSprite = Resources.Load<Sprite>("Sprites/missle");
+
+        SpriteRenderer spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+        }
+
+        spriteRenderer.transform.localScale = new  Vector3(0.5f, 0.5f, 0.5f);
+        spriteRenderer.sprite = missleSprite;
+        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.color = Color.white;
     }
 
     private void SetPrimitiveShapeColorAndAttach(PrimitiveShape primitiveShape)
     {
-        primitiveShape.Transform.GetComponent<SpriteRenderer>().color = Color.blue;
+        primitiveShape.Transform.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
         primitiveShape.Transform.SetParent(Transform, false);
     }
 
