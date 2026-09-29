@@ -9,6 +9,7 @@ public class BlinkWolfBehaviour : MonoBehaviour
     private MovementBehaviour movementBehaviour;
     private float speedChangeDuration = 0.66f;
     private BlinkWolf blinkWolf;
+    private Transform visual;
 
     // Start is called before the first frame update
     void Start()
@@ -16,14 +17,19 @@ public class BlinkWolfBehaviour : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         playerTransform = ServiceLocator.Instance.GetService<Player>().Transform;
         movementBehaviour = GetComponent<MovementBehaviour>();
+        
+        visual = transform.Find("Visual");
     }
 
     public void Activate(BlinkWolf blinkWolf)
     {
         this.blinkWolf = blinkWolf;
         StartCoroutine(BlinkForward());
-
         transform.localScale = Vector3.one;
+        if (visual != null)
+        {
+            visual.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        }
     }
 
     private void FixedUpdate()
@@ -35,10 +41,9 @@ public class BlinkWolfBehaviour : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(3, 4.5f));            
+            yield return new WaitForSeconds(Random.Range(3, 4.5f));
             float speed = movementBehaviour.MovementSpeed;
 
-            //stop moving.
             for (float t = 0; t <= speedChangeDuration; t += Time.deltaTime)
             {
                 movementBehaviour.MovementSpeed = Mathf.Lerp(speed, 0, t / speedChangeDuration);
@@ -55,8 +60,6 @@ public class BlinkWolfBehaviour : MonoBehaviour
                 yield return null;
             }
 
-            //blink forward.           
-
             transform.position = targetLocation;
 
             for (float t = 0; t < speedChangeDuration; t += Time.deltaTime)
@@ -67,9 +70,7 @@ public class BlinkWolfBehaviour : MonoBehaviour
             }
 
             blinkWolf.EnterChargeMode();
-
             yield return new WaitForSeconds(1);
-
             blinkWolf.ExitChargeMode();
         }
     }

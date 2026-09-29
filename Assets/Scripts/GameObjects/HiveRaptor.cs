@@ -5,6 +5,7 @@ public class HiveRaptor : TriangularShip
     private HiveRaptorBehaviour hiveRaptorBehaviour;    
     private FlockingBehaviour flockingBehaviour;
     private FlockingComponent[] flockingComponents;
+    private Sprite shipSprite;
     
     public HiveRaptor(string name) : base(name)
     {
@@ -15,6 +16,23 @@ public class HiveRaptor : TriangularShip
         GameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
 
         CreateFlockingBehaviour();
+        SetSprite();
+    }
+    
+    private void SetSprite()
+    {
+        shipSprite = Resources.Load<Sprite>("Sprites/yellow-ship");
+
+        SpriteRenderer spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+        }
+
+        spriteRenderer.transform.localScale = new  Vector3(0.4f, 0.4f, 0.4f);
+        spriteRenderer.sprite = shipSprite;
+        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.color = Color.white;
     }
 
     private void CreateFlockingBehaviour()

@@ -7,6 +7,7 @@ public class TailGator : TriangularShip
     private FollowPlayerBehaviour followPlayer;
     private ShootBehaviour shootBehaviour;
     private EntityId bulletId;
+    private Sprite shipSprite;
 
     public TailGator(string name) : base(name)
 	{
@@ -20,6 +21,23 @@ public class TailGator : TriangularShip
         shootBehaviour.PoolableType = PoolableType.Bullet;
         shootBehaviour.SubscribeToProjectileStateChangedEvent(OnProjectileActivated, OnProjectileDeactivated);
         GameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        SetSprite();
+    }
+    
+    private void SetSprite()
+    {
+        shipSprite = Resources.Load<Sprite>("Sprites/red-ship");
+
+        SpriteRenderer spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+        }
+
+        spriteRenderer.transform.localScale = new  Vector3(0.5f, 0.5f, 0.5f);
+        spriteRenderer.sprite = shipSprite;
+        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.color = Color.white;
     }
 
     public override void Activate(Vector2 position)

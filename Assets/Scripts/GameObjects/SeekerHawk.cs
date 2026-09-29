@@ -10,6 +10,7 @@ public class SeekerHawk : EntityList
 
     private FollowPlayerBehaviour playerFollowBehaviour;
     private ShootBehaviour shootBehaviour;
+    private Sprite shipSprite;
     public SeekerHawk(string name) : base(name)
     {
         GameObject.layer = (int)CollisionLayer.Enemy;
@@ -38,6 +39,23 @@ public class SeekerHawk : EntityList
         polygonCollider2D.points = new Vector2[3] { new(0, 0), new(3f, 0), new(1.5f, 1.5f) };
         polygonCollider2D.isTrigger = true;
         polygonCollider2D.offset = new Vector2(-1.5f, -1);
+        SetSprite();
+    }
+    
+    private void SetSprite()
+    {
+        shipSprite = Resources.Load<Sprite>("Sprites/blue-ship");
+
+        SpriteRenderer spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+        }
+
+        spriteRenderer.transform.localScale = new  Vector3(0.8f, 0.8f, 0.8f);
+        spriteRenderer.sprite = shipSprite;
+        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.color = Color.white;
     }
     private void OnProjectileActivated(EntityId instanceId)
     {
@@ -50,7 +68,7 @@ public class SeekerHawk : EntityList
     }
     private void SetPrimitiveShapeColorAndAttach(PrimitiveShape primitiveShape)
     {
-        primitiveShape.Transform.GetComponent<SpriteRenderer>().color = Color.blue;
+        primitiveShape.Transform.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
         primitiveShape.Transform.SetParent(Transform, false);
     }
 

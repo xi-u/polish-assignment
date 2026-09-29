@@ -4,6 +4,7 @@ public class WebWeaver : DoubleWingedTriangularShip
 {    
     private RoamingBehaviour roamingBehaviour;
     private ShootBehaviour shootingBehaviour;
+    private Sprite shipSprite;
 
     public WebWeaver(string name) : base(name)
     {
@@ -19,6 +20,29 @@ public class WebWeaver : DoubleWingedTriangularShip
         shootingBehaviour.ShootingInterval = 3.5f;
         shootingBehaviour.PoolableType = ObjectPool.PoolableType.Mine;
         shootingBehaviour.SubscribeToProjectileStateChangedEvent(OnMineActivated, OnMineDeactivated);
+        SetSprite();
+    }
+    
+    private void SetSprite()
+    {
+        shipSprite = Resources.Load<Sprite>("Sprites/pink-ship");
+
+        SpriteRenderer spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+        }
+
+        spriteRenderer.transform.localScale = new  Vector3(0.6f, 0.6f, 0.6f);
+        spriteRenderer.sprite = shipSprite;
+        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.color = Color.white;
+        
+        if (leftWingSpriteRenderer != null)
+            leftWingSpriteRenderer.enabled = false;
+
+        if (rightWingSpriteRenderer != null)
+            rightWingSpriteRenderer.enabled = false;
     }
     
     public EntityId InstanceId => GameObject.GetEntityId();

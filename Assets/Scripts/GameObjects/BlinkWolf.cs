@@ -7,15 +7,41 @@ public class BlinkWolf : TriangularShip
     BlinkWolfBehaviour blinkWolfBehaviour;
     private FlockingBehaviour flockingBehaviour;
     private FlockingComponent[] flockingComponents;
+    private Sprite shipSprite;
+    private Transform visual;
+    private readonly Vector3 visualScale = new Vector3(0.4f, 0.4f, 0.4f);
+
     public BlinkWolf(string name) : base(name)
     {
+        CreateVisual();
+        SetSprite();
         GameObject.layer = (int)CollisionLayer.Enemy;
+
+        SpriteRenderer rootSpriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+        if (rootSpriteRenderer != null)
+        {
+            rootSpriteRenderer.enabled = false;
+        }
+
         blinkWolfBehaviour = GameObject.AddComponent<BlinkWolfBehaviour>();
-
-        GameObject.GetComponent<SpriteRenderer>().color = new Color32(92, 255, 255, 255);
         CreateFlockingBehaviour();
-
-        flockingBehaviour.MovementSpeed = UnitStats.BlinkWolfNormalSpeed;        
+        flockingBehaviour.MovementSpeed = UnitStats.BlinkWolfNormalSpeed;
+    }
+    
+    private void CreateVisual()
+    {
+        GameObject visualObject = new GameObject("Visual");
+        visualObject.transform.SetParent(GameObject.transform, false);
+        visual = visualObject.transform;
+    }
+    
+    private void SetSprite()
+    {
+        SpriteRenderer spriteRenderer = visual.gameObject.AddComponent<SpriteRenderer>();
+        spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/cyan-ship");
+        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.color = new Color32(92, 255, 255, 255);
+        visual.localScale = visualScale;
     }
 
     private void CreateFlockingBehaviour()

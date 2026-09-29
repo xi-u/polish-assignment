@@ -6,6 +6,7 @@ using UnityEngine;
 public class MirrageMantaClone : DoubleWingedTriangularShip
 {
     private EntityId[] instanceIds;
+    private Sprite shipSprite;
     public MirrageMantaClone(string name) : base(name)
     {
         SetCollisionLayer(CollisionLayer.Enemy);
@@ -17,6 +18,29 @@ public class MirrageMantaClone : DoubleWingedTriangularShip
 
         GameObject.AddComponent<RoamingBehaviour>().MovementSpeed = UnitStats.MirrageMantaSpeed;
         GameObject.AddComponent<ColorOscillationBehaviour>().Activate(color, colorTo, SpriteRenderers);
+        SetSprite();
+    }
+    
+    private void SetSprite()
+    {
+        shipSprite = Resources.Load<Sprite>("Sprites/purple-clone-ship");
+
+        SpriteRenderer spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+        }
+
+        spriteRenderer.transform.localScale = new  Vector3(0.5f, 0.5f, 0.5f);
+        spriteRenderer.sprite = shipSprite;
+        spriteRenderer.sortingOrder = 10;
+        spriteRenderer.color = Color.white;
+
+        if (leftWingSpriteRenderer != null)
+            leftWingSpriteRenderer.enabled = false;
+
+        if (rightWingSpriteRenderer != null)
+            rightWingSpriteRenderer.enabled = false;
     }
     
     public void SetParentIds(params EntityId[] instanceId)
